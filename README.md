@@ -1,3 +1,7 @@
+# Published in
+
+This project was publicated in [Angular Firebase](https://angular-ionic-998dd.firebaseapp.com).
+
 # AngularFirebase
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.2.

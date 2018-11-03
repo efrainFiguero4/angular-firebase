@@ -1,0 +1,27 @@
+<div class="container py-4">
+	<button [routerLink]="['nuevo']" class="btn btn-sm btn-success my-2">Nuevo</button>
+	<table class="table products-table">
+		<thead>
+			<tr>
+				<th scope="col">#</th>
+				<th scope="col">Nombres</th>
+				<th scope="col">Apellidos</th>
+				<th class="text-center">Accion</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let usuario of ls_usuarios, let index= index">
+				<th>{{index +1}}</th>
+				<td>{{usuario.nombre}}</td>
+				<td>{{usuario.apellidos}}</td>
+				<td class="text-center">
+					<button [routerLink]="['editar', usuario.id]" class="btn btn-sm btn-success">Editar</button>
+					<button class="btn btn-sm btn-danger mx-2" (click)="go_eliminarusuario(usuario)">Eliminar</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="view-side-form">
+		<router-outlet></router-outlet>
+	</div>
+</div>
