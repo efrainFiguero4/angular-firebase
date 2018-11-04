@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService, Usuario } from '../../../services/firebaseservice.service';
-import { switchMap } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { slideInOutAnimation } from './detalle.animation';
 import { isNullOrUndefined } from 'util';
+import { Subject } from 'rxjs';
 @Component({
 	selector: 'app-detalle',
 	templateUrl: './detalle.component.html',
@@ -17,22 +18,25 @@ export class DetalleComponent implements OnInit {
 
 	id_usuario: number;
 	usuario = new Usuario();
+	destroy: Subject<boolean> = new Subject<boolean>();
+
 	ngOnInit() {
 		this.id_usuario = this._route.snapshot.params["id"];
-
-		console.log(this.id_usuario, this._route)
 		if (!isNullOrUndefined(this.id_usuario))
 			this.get_usuario(this.id_usuario)
 		else
 			this.usuario = new Usuario();
 	}
 
+	ngOnDestroy(): void {
+		this.destroy.next();
+		this.destroy.complete();
+	}
+
 	get_usuario(id: number) {
-		console.log(id)
-		this._usuarioservice.get_usuario(id).valueChanges().subscribe(usuario => {
+		this._usuarioservice.get_usuario(id).pipe(takeUntil(this.destroy)).subscribe(usuario => {
 			this.usuario = usuario;
-			console.log(this.usuario)
-		})
+		}, error => console.error(error), () => console.log("complete"))
 	}
 
 	guardar_usuario(usuario: Usuario) {
